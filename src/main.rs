@@ -1,10 +1,11 @@
-mod file;
-mod entities;
-mod console;
-
-use crate::entities::expense::Expense;
 use crate::console::display::Display;
+use crate::entities::expense::Expense;
 use crate::file::parser::FileData;
+
+mod console;
+mod entities;
+mod file;
+
 fn main() {
     let mut app = App::new();
     let parsed_data = app.parser.get_parsed_data();
@@ -17,6 +18,7 @@ struct App {
     display: Display,
     parser: FileData,
 }
+
 impl App {
     fn new() -> App {
         App {
@@ -61,6 +63,3 @@ impl App {
         self.display.set_expenses(expenses);
     }
 }
-
-
-

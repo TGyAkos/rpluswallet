@@ -3,17 +3,19 @@ use std::io;
 use std::io::{BufRead, Write};
 use std::path::Path;
 use std::str::FromStr;
+
 use crate::entities::expense::{Expense, ExpenseCategory, ExpenseModel, ExpenseType};
 
-pub struct FileData<> {
+pub struct FileData {
     name: &'static str,
 }
+
 impl FileData {
     pub fn new(name: &'static str) -> FileData
-        where &'static str: AsRef<Path> {
-        FileData {
-            name,
-        }
+    where
+        &'static str: AsRef<Path>,
+    {
+        FileData { name }
     }
     pub fn save_date(&self, expense: &Expense) {
         let mut file = OpenOptions::new()
@@ -23,13 +25,15 @@ impl FileData {
             .open(self.name)
             .expect("Unable to open file");
         for expense_model in expense.get_all_expenses() {
-            let line = format!("{};{};{};{};{};{}\n",
-                               expense_model.id,
-                               expense_model.date,
-                               expense_model.expense_category.to_string(),
-                               expense_model.expense_type.to_string(),
-                               expense_model.amount,
-                               expense_model.description);
+            let line = format!(
+                "{};{};{};{};{};{}\n",
+                expense_model.id,
+                expense_model.date,
+                expense_model.expense_category.to_string(),
+                expense_model.expense_type.to_string(),
+                expense_model.amount,
+                expense_model.description
+            );
             file.write(line.as_bytes()).expect("Unable to write data");
         }
     }
@@ -37,7 +41,7 @@ impl FileData {
         let mut expense = Expense::new();
         if let Ok(lines) = self.read_file() {
             for line in lines.flatten() {
-                let mut expense_model= ExpenseModel::default();
+                let mut expense_model = ExpenseModel::default();
                 let line: Vec<&str> = line.split(";").collect();
                 expense_model.id = line[0].parse::<i32>().unwrap();
                 expense_model.date = line[1].into();
@@ -46,7 +50,6 @@ impl FileData {
                 expense_model.amount = line[4].parse::<i32>().unwrap();
                 expense_model.description = line[5].into();
                 expense.append_expense(expense_model);
-
             }
         } else {
             File::create("expenses.txt").expect("Unable to create file");

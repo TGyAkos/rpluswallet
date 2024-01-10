@@ -1,6 +1,8 @@
 use std::io::BufRead;
 use std::str::FromStr;
+
 use crate::entities::expense::{Expense, ExpenseCategory, ExpenseModel, ExpenseType};
+
 pub(crate) struct Display {
     expenses: Expense,
     main_menu: String,
@@ -16,7 +18,8 @@ impl Display {
                 2. Search expense\n\
                 3. Update expense\n\
                 4. Delete expense\n\
-                5. Exit"),
+                5. Exit",
+            ),
             search_menu: String::from(
                 "1. Display every expense\n\
                 2. Search by id\n\
@@ -24,7 +27,8 @@ impl Display {
                 4. Search by type\n\
                 5. Search by category\n\
                 6. Search by type and date\n\
-                7. Back"),
+                7. Back",
+            ),
         }
     }
     pub fn print_main_menu(&self) {
@@ -66,9 +70,10 @@ impl Display {
         self.print_expense_categories();
         println!("Enter category:");
         let expense_category = self.get_user_response();
-        for expense in self.expenses.get_expenses_by_category(
-            ExpenseCategory::from_str(expense_category.as_str()).unwrap()
-        ) {
+        for expense in self
+            .expenses
+            .get_expenses_by_category(ExpenseCategory::from_str(expense_category.as_str()).unwrap())
+        {
             self.print_expense(expense);
         }
     }
@@ -76,9 +81,10 @@ impl Display {
         self.print_expense_types();
         println!("Enter type:");
         let expense_type = self.get_user_response();
-        for expense in self.expenses.get_expenses_by_type(
-            ExpenseType::from_str(expense_type.as_str()).unwrap()
-        ) {
+        for expense in self
+            .expenses
+            .get_expenses_by_type(ExpenseType::from_str(expense_type.as_str()).unwrap())
+        {
             self.print_expense(expense);
         }
     }
@@ -89,7 +95,7 @@ impl Display {
         let date = self.get_user_response();
         for expense in self.expenses.get_expenses_by_category_and_date(
             ExpenseCategory::from_str(expense_category.as_str()).unwrap(),
-            date
+            date,
         ) {
             self.print_expense(expense);
         }
@@ -100,13 +106,15 @@ impl Display {
         }
     }
     fn print_expense(&self, expense: &ExpenseModel) {
-        println!("Id: {}\nDate: {}\nType: {}\nCategory: {}\nAmount: {}\nDescription: {}",
-                 expense.id,
-                 expense.date,
-                 expense.expense_type,
-                 expense.expense_category,
-                 expense.amount,
-                 expense.description);
+        println!(
+            "Id: {}\nDate: {}\nType: {}\nCategory: {}\nAmount: {}\nDescription: {}",
+            expense.id,
+            expense.date,
+            expense.expense_type,
+            expense.expense_category,
+            expense.amount,
+            expense.description
+        );
     }
     pub fn get_user_response(&self) -> String {
         let mut buffer = String::new();
@@ -132,10 +140,12 @@ impl Display {
         new_expense.date = self.get_user_response();
         self.print_expense_types();
         println!("Enter type:");
-        new_expense.expense_type = ExpenseType::from_str(self.get_user_response().as_str()).unwrap();
+        new_expense.expense_type =
+            ExpenseType::from_str(self.get_user_response().as_str()).unwrap();
         self.print_expense_categories();
         println!("Enter category:");
-        new_expense.expense_category = ExpenseCategory::from_str(self.get_user_response().as_str()).unwrap();
+        new_expense.expense_category =
+            ExpenseCategory::from_str(self.get_user_response().as_str()).unwrap();
         println!("Enter amount:");
         new_expense.amount = self.get_int_user_response();
         println!("Enter description:");
@@ -143,17 +153,19 @@ impl Display {
         new_expense
     }
     fn print_expense_types(&self) {
-        println!("1. {}\n2. {}",
-                 ExpenseType::Essential,
-                 ExpenseType::NonEssential,
+        println!(
+            "1. {}\n2. {}",
+            ExpenseType::Essential,
+            ExpenseType::NonEssential,
         );
     }
     fn print_expense_categories(&self) {
-        println!("1. {}\n2. {}\n3. {}\n4. {}",
-                 ExpenseCategory::Food,
-                 ExpenseCategory::Rent,
-                 ExpenseCategory::Transport,
-                 ExpenseCategory::Other,
+        println!(
+            "1. {}\n2. {}\n3. {}\n4. {}",
+            ExpenseCategory::Food,
+            ExpenseCategory::Rent,
+            ExpenseCategory::Transport,
+            ExpenseCategory::Other,
         );
     }
     pub fn get_expenses(&self) -> &Expense {

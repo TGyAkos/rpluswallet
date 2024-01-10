@@ -14,11 +14,11 @@ impl FromStr for ExpenseCategory {
     type Err = String;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
-            "Food"  => Ok(ExpenseCategory::Food),
-            "Rent"  => Ok(ExpenseCategory::Rent),
+            "Food" => Ok(ExpenseCategory::Food),
+            "Rent" => Ok(ExpenseCategory::Rent),
             "Transport" => Ok(ExpenseCategory::Transport),
             "Other" => Ok(ExpenseCategory::Other),
-            _      => Err("Invalid expense category".into()),
+            _ => Err("Invalid expense category".into()),
         }
     }
 }
@@ -42,9 +42,9 @@ impl FromStr for ExpenseType {
     type Err = String;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
-            "Essential"  => Ok(ExpenseType::Essential),
-            "NonEssential"  => Ok(ExpenseType::NonEssential),
-            _      => Err("Invalid expense type".into()),
+            "Essential" => Ok(ExpenseType::Essential),
+            "NonEssential" => Ok(ExpenseType::NonEssential),
+            _ => Err("Invalid expense type".into()),
         }
     }
 }
@@ -92,17 +92,20 @@ impl Expense {
     }
     pub fn append_expense(&mut self, mut expense_model: ExpenseModel) {
         expense_model.id = self.biggest_id;
-        if self.biggest_id <= expense_model.id { self.biggest_id += 1 };
+        if self.biggest_id <= expense_model.id {
+            self.biggest_id += 1
+        };
         self.all_expenses.push(expense_model);
         self.sort_expenses_by_id();
     }
-    pub fn create_new_expense(&mut self,
-                          date: String,
-                          expense_type: ExpenseType,
-                          expense_category: ExpenseCategory,
-                          amount: i32,
-                          description: String
-                          ) -> ExpenseModel {
+    pub fn create_new_expense(
+        &mut self,
+        date: String,
+        expense_type: ExpenseType,
+        expense_category: ExpenseCategory,
+        amount: i32,
+        description: String,
+    ) -> ExpenseModel {
         let id: i32 = self.biggest_id;
         self.biggest_id += 1;
         ExpenseModel {
@@ -156,7 +159,11 @@ impl Expense {
         }
         expenses
     }
-    pub fn get_expenses_by_category_and_date(&self, expense_category: ExpenseCategory, date: String) -> Vec<&ExpenseModel> {
+    pub fn get_expenses_by_category_and_date(
+        &self,
+        expense_category: ExpenseCategory,
+        date: String,
+    ) -> Vec<&ExpenseModel> {
         let mut expenses: Vec<&ExpenseModel> = Vec::new();
         for expense in &self.all_expenses {
             if expense.expense_category == expense_category && expense.date == date {
