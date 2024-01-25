@@ -11,7 +11,7 @@
  - [Design patterns](#design-patterns)
  - [Code conventions](#code-conventions)
  - [Tests](#tests)
- - [Efficiency](#efficiency))
+ - [Efficiency](#efficiency)
  - [Developed by](#developed-by)
 
 ---
